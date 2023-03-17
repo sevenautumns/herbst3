@@ -42,7 +42,7 @@ pub fn shift(dir: ShiftDirection) -> Result<()> {
         SplitAction::MoveableLocal => {}
         SplitAction::MoveableGlobal => {
             // if no monitor in desired direction exists, bail
-            if monitor_in_dir_exists(dir) {
+            if !monitor_in_dir_exists(dir) {
                 bail!("No monitor in {dir} direction")
             }
         }

@@ -1,6 +1,4 @@
 {
-  description = "ARINC 653 P4 compliant Linux Hypervisor";
-
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     utils.url = "git+https://github.com/numtide/flake-utils.git";
@@ -65,7 +63,7 @@
         # a devshell with all the necessary bells and whistles
         devShells.default = (pkgs.devshell.mkShell {
           imports = [ "${devshell}/extra/git/hooks.nix" ];
-          name = "linux-apex-dev-shell";
+          name = "herbst3-dev-shell";
           packages = with pkgs; [
             rust-toolchain
             rust-analyzer
