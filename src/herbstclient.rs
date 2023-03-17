@@ -1,3 +1,4 @@
+use std::process::Stdio;
 use std::str::FromStr;
 
 use anyhow::Result;
@@ -36,7 +37,11 @@ pub fn monitor_in_dir_exists(dir: ShiftDirection) -> bool {
     };
 
     let mut status_cmd = std::process::Command::new("herbstclient");
-    let status_cmd = status_cmd.arg("monitor_rect").arg(dir);
+    let status_cmd = status_cmd
+        .arg("monitor_rect")
+        .arg(dir)
+        .stdout(Stdio::null())
+        .stderr(Stdio::null());
     debug!("Execute monitor_rect: {status_cmd:?}");
     let status = status_cmd.status();
     status.is_ok()
