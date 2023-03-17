@@ -28,7 +28,7 @@ pub fn get_focused_frame_index() -> Result<Vec<u8>> {
     Ok(output)
 }
 
-pub fn monitor_in_dir_exists(dir: ShiftDirection) -> bool {
+pub fn monitor_in_dir_exists(dir: ShiftDirection) -> Result<bool> {
     let dir = match dir {
         ShiftDirection::Right => "-r",
         ShiftDirection::Left => "-l",
@@ -43,8 +43,9 @@ pub fn monitor_in_dir_exists(dir: ShiftDirection) -> bool {
         .stdout(Stdio::null())
         .stderr(Stdio::null());
     debug!("Execute monitor_rect: {status_cmd:?}");
-    let status = status_cmd.status();
-    status.is_ok()
+    let status = status_cmd.status()?;
+    trace!("Got status: {status:?}");
+    Ok(status.success())
 }
 
 pub fn get_layout() -> Result<String> {
@@ -125,27 +126,33 @@ pub fn get_focused_client_geometry() -> Result<Geometry> {
     Geometry::from_str(&output)
 }
 
-pub fn shift_focused_window(dir: ShiftDirection) -> Result<()> {
+pub fn shift_focused_window(dir: ShiftDirection, frame: bool) -> Result<()> {
     let mut shift_cmd = std::process::Command::new("herbstclient");
-    let shift_cmd = shift_cmd
-        .arg("shift")
-        .arg(dir.to_string())
-        .arg("--level=all");
+    let mut shift_cmd = shift_cmd.arg("shift").arg(dir.to_string());
+    if frame {
+        shift_cmd = shift_cmd.arg("--level=frame");
+    } else {
+        shift_cmd = shift_cmd.arg("--level=all");
+    }
     debug!("Execute shift: {shift_cmd:?}");
     shift_cmd.output()?;
     Ok(())
 }
 
-pub fn shift_focused_window_remove_frame(dir: ShiftDirection) -> Result<()> {
+pub fn shift_focused_window_remove_frame(dir: ShiftDirection, frame: bool) -> Result<()> {
     let mut shift_cmd = std::process::Command::new("herbstclient");
-    let shift_cmd = shift_cmd
+    let mut shift_cmd = shift_cmd
         .arg("chain")
         .arg("-")
         .arg("remove")
         .arg("-")
         .arg("shift")
-        .arg(dir.to_string())
-        .arg("--level=all");
+        .arg(dir.to_string());
+    if frame {
+        shift_cmd = shift_cmd.arg("--level=frame");
+    } else {
+        shift_cmd = shift_cmd.arg("--level=all");
+    }
     debug!("Execute shift: {shift_cmd:?}");
     shift_cmd.output()?;
     Ok(())

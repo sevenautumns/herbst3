@@ -3,8 +3,18 @@ use strum::Display;
 
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
-pub enum Args {
+pub struct Args {
     /// Shift focused window
+    #[command(subcommand)]
+    pub cmd: SubCommand,
+
+    /// Only shift on "Frame" level
+    #[arg(short, long, global(true))]
+    pub frame: bool,
+}
+
+#[derive(Parser, Debug)]
+pub enum SubCommand {
     #[command(subcommand)]
     Shift(ShiftDirection),
 }

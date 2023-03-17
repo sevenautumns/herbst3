@@ -10,7 +10,7 @@ use crate::herbstclient::{
 };
 use crate::parser::{get_layout_stack, LayoutType};
 
-pub fn shift(dir: ShiftDirection) -> Result<()> {
+pub fn shift(dir: ShiftDirection, frame: bool) -> Result<()> {
     let initial_clients = get_focused_frame_client_count()?;
 
     if initial_clients == 0 {
@@ -20,9 +20,9 @@ pub fn shift(dir: ShiftDirection) -> Result<()> {
     let client_index = get_focused_client_index()?;
 
     // If we can shift within the current frame, do so
-    if can_focus_within_frame(initial_clients, client_index, dir)? {
+    if !frame && can_focus_within_frame(initial_clients, client_index, dir)? {
         debug!("Can be shifted within focused frame");
-        shift_focused_window(dir)?;
+        shift_focused_window(dir, false)?;
         return Ok(());
     }
 
@@ -42,16 +42,16 @@ pub fn shift(dir: ShiftDirection) -> Result<()> {
         SplitAction::MoveableLocal => {}
         SplitAction::MoveableGlobal => {
             // if no monitor in desired direction exists, bail
-            if !monitor_in_dir_exists(dir) {
+            if !monitor_in_dir_exists(dir)? {
                 bail!("No monitor in {dir} direction")
             }
         }
     }
 
     if initial_clients <= 1 {
-        shift_focused_window_remove_frame(dir)?;
+        shift_focused_window_remove_frame(dir, frame)?;
     } else {
-        shift_focused_window(dir)?;
+        shift_focused_window(dir, frame)?;
     }
 
     Ok(())
@@ -79,10 +79,10 @@ pub fn find_split(
         ShiftDirection::Up | ShiftDirection::Down => LayoutType::Vertical,
     };
 
-    // In case we the root-node itself is a "clients" container
+    // In case the root-node itself is a "clients" container
     // and there is more than one client: Split it
-    if clients > 1 && index.is_empty() {
-        return SplitAction::Split(vec![]);
+    if clients > 1 {
+        return SplitAction::Split(index.to_vec());
     }
 
     for (e, (i, l)) in index.iter().zip(layout_stack.iter()).enumerate().rev() {

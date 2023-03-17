@@ -1,4 +1,5 @@
 use clap::Parser;
+use cli::SubCommand;
 use log::error;
 
 use crate::cli::Args;
@@ -12,8 +13,9 @@ mod shift;
 fn main() {
     pretty_env_logger::init();
 
-    let res = match Args::parse() {
-        Args::Shift(dir) => shift::shift(dir),
+    let args = Args::parse();
+    let res = match args.cmd {
+        SubCommand::Shift(dir) => shift::shift(dir, args.frame),
     };
 
     if let Err(e) = res {
