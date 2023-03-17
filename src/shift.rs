@@ -30,7 +30,7 @@ pub fn shift(dir: ShiftDirection) -> Result<()> {
     let layout_stack = get_layout_stack(&source_index)?;
 
     // Find index to split
-    let split = find_split(dir, &source_index, &layout_stack);
+    let split = find_split(initial_clients, dir, &source_index, &layout_stack);
     debug!("Split: {split:?}");
 
     match split {
@@ -64,7 +64,12 @@ pub enum SplitAction {
     MoveableGlobal,
 }
 
-pub fn find_split(dir: ShiftDirection, index: &[u8], layout_stack: &[LayoutType]) -> SplitAction {
+pub fn find_split(
+    clients: usize,
+    dir: ShiftDirection,
+    index: &[u8],
+    layout_stack: &[LayoutType],
+) -> SplitAction {
     let movable_index = match dir {
         ShiftDirection::Right | ShiftDirection::Down => 0,
         ShiftDirection::Left | ShiftDirection::Up => 1,
@@ -73,6 +78,12 @@ pub fn find_split(dir: ShiftDirection, index: &[u8], layout_stack: &[LayoutType]
         ShiftDirection::Right | ShiftDirection::Left => LayoutType::Horizontal,
         ShiftDirection::Up | ShiftDirection::Down => LayoutType::Vertical,
     };
+
+    // In case we the root-node itself is a "clients" container
+    // and there is more than one client: Split it
+    if clients > 1 && index.is_empty() {
+        return SplitAction::Split(vec![]);
+    }
 
     for (e, (i, l)) in index.iter().zip(layout_stack.iter()).enumerate().rev() {
         if movable_index.eq(i) && target_layout_type.eq(l) {
