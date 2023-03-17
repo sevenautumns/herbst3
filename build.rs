@@ -1,10 +1,9 @@
-use clap::CommandFactory;
-use clap_complete::{
-    generate_to,
-    shells::{Bash, Fish, Zsh},
-};
 use std::env;
 use std::io::Error;
+
+use clap::CommandFactory;
+use clap_complete::generate_to;
+use clap_complete::shells::{Bash, Fish, Zsh};
 
 include!("src/cli.rs");
 
@@ -13,6 +12,7 @@ fn main() -> Result<(), Error> {
         None => return Ok(()),
         Some(outdir) => outdir,
     };
+
     let mut cmd = Args::command();
     let bin = "herbst3";
 

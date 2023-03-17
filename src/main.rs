@@ -1,24 +1,22 @@
-use anyhow::Result;
 use clap::Parser;
+use log::error;
 
 use crate::cli::Args;
 
 mod cli;
+mod helper;
 mod herbstclient;
 mod parser;
 mod shift;
 
-fn main() -> Result<()> {
+fn main() {
     pretty_env_logger::init();
 
-    match Args::parse() {
-        Args::Shift(dir) => shift::shift(dir)?,
-    }
+    let res = match Args::parse() {
+        Args::Shift(dir) => shift::shift(dir),
+    };
 
-    Ok(())
-    // let index = get_focused_index()?;
-    // println!("{index:#?}");
-    // let stack = get_layout_stack(index)?;
-    // println!("{stack:?}");
-    // Ok(())
+    if let Err(e) = res {
+        error!("{e:?}")
+    }
 }

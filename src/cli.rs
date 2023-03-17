@@ -1,4 +1,5 @@
 use clap::{Parser, Subcommand};
+use strum::Display;
 
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
@@ -8,7 +9,8 @@ pub enum Args {
     Shift(ShiftDirection),
 }
 
-#[derive(Subcommand, Debug)]
+#[derive(Subcommand, Debug, Display, Clone, Copy, PartialEq)]
+#[strum(serialize_all = "camelCase")]
 pub enum ShiftDirection {
     /// Shift focused window right
     Right,

@@ -1,9 +1,11 @@
 use std::str::FromStr;
 
 use anyhow::{Context, Result};
-use pest::{iterators::Pair, Parser};
+use log::debug;
+use pest::iterators::Pair;
+use pest::Parser;
 use pest_derive::Parser;
-use strum::EnumString;
+use strum::{Display, EnumString};
 
 use crate::herbstclient::get_layout;
 
@@ -20,7 +22,7 @@ id          = { "0x" ~ ASCII_HEX_DIGIT+ }
 "#]
 struct LayoutParser;
 
-#[derive(Debug, PartialEq, EnumString)]
+#[derive(Debug, PartialEq, EnumString, Display)]
 #[strum(serialize_all = "camelCase")]
 pub enum LayoutType {
     Vertical,
@@ -46,6 +48,7 @@ pub fn get_layout_stack(index: &[u8]) -> Result<Vec<LayoutType>> {
         }
     }
 
+    debug!("Layout stack: {:?}", &layouts);
     Ok(layouts)
 }
 
