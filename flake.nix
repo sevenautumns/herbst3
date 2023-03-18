@@ -96,6 +96,7 @@
 
         # always check these
         checks = {
+          herbst3 = self.packages.${system}.herbst3;
           nixpkgs-fmt = pkgs.runCommand "nixpkgs-fmt"
             {
               nativeBuildInputs = [ pkgs.nixpkgs-fmt ];
