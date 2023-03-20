@@ -1,0 +1,3 @@
+[submodule "herbstluftwm"]
+	path = herbstluftwm
+	url = https://github.com/herbstluftwm/herbstluftwm.git

@@ -7,7 +7,7 @@ use pest::Parser;
 use pest_derive::Parser;
 use strum::{Display, EnumString};
 
-use crate::herbstclient::get_layout;
+use crate::herbstclient::Herbstclient;
 
 #[derive(Parser)]
 #[grammar_inline = r#"
@@ -31,9 +31,9 @@ pub enum LayoutType {
     Grid,
 }
 
-pub fn get_layout_stack(index: &[u8]) -> Result<Vec<LayoutType>> {
+pub fn get_layout_stack(hc: &mut Herbstclient, index: &[u8]) -> Result<Vec<LayoutType>> {
     let mut layouts = Vec::new();
-    let layout = get_layout()?;
+    let layout = hc.get_layout()?;
     let mut node = LayoutParser::parse(Rule::node, &layout)?
         .next()
         .context("")?;
