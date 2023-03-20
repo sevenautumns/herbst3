@@ -29,16 +29,15 @@
       "locked": {
         "lastModified": 1679293469,
         "narHash": "sha256-h9XKC9QnuK09nK8aQB4OpXiqbZEzp75ZyQ2qsS1n7vk=",
-        "ref": "main",
+        "owner": "nix-community",
+        "repo": "fenix",
         "rev": "742691f1a9544179638527effcaa2c7fb4cf9b84",
-        "revCount": 1402,
-        "type": "git",
-        "url": "https://github.com/nix-community/fenix.git"
+        "type": "github"
       },
       "original": {
-        "ref": "main",
-        "type": "git",
-        "url": "https://github.com/nix-community/fenix.git"
+        "owner": "nix-community",
+        "repo": "fenix",
+        "type": "github"
       }
     },
     "flake-utils": {
@@ -61,15 +60,15 @@
       "locked": {
         "lastModified": 1678357658,
         "narHash": "sha256-v0HUTjloBbiQi7pHp548IeU0ShZP/dpOR33X7r9GZ5E=",
-        "ref": "25588616e0f3d8c0cc1b07c27ca6f0fd6ed10cd1",
+        "owner": "herbstluftwm",
+        "repo": "herbstluftwm",
         "rev": "25588616e0f3d8c0cc1b07c27ca6f0fd6ed10cd1",
-        "revCount": 2998,
-        "type": "git",
-        "url": "file:./herbstluftwm"
+        "type": "github"
       },
       "original": {
-        "type": "git",
-        "url": "file:./herbstluftwm"
+        "owner": "herbstluftwm",
+        "repo": "herbstluftwm",
+        "type": "github"
       }
     },
     "naersk": {
@@ -81,15 +80,15 @@
       "locked": {
         "lastModified": 1671096816,
         "narHash": "sha256-ezQCsNgmpUHdZANDCILm3RvtO1xH8uujk/+EqNvzIOg=",
-        "ref": "refs/heads/master",
+        "owner": "nix-community",
+        "repo": "naersk",
         "rev": "d998160d6a076cfe8f9741e56aeec7e267e3e114",
-        "revCount": 306,
-        "type": "git",
-        "url": "https://github.com/nix-community/naersk.git"
+        "type": "github"
       },
       "original": {
-        "type": "git",
-        "url": "https://github.com/nix-community/naersk.git"
+        "owner": "nix-community",
+        "repo": "naersk",
+        "type": "github"
       }
     },
     "nixpkgs": {
@@ -155,15 +154,15 @@
       "locked": {
         "lastModified": 1678901627,
         "narHash": "sha256-U02riOqrKKzwjsxc/400XnElV+UtPUQWpANPlyazjH0=",
-        "ref": "refs/heads/main",
+        "owner": "numtide",
+        "repo": "flake-utils",
         "rev": "93a2b84fc4b70d9e089d029deacc3583435c2ed6",
-        "revCount": 68,
-        "type": "git",
-        "url": "https://github.com/numtide/flake-utils.git"
+        "type": "github"
       },
       "original": {
-        "type": "git",
-        "url": "https://github.com/numtide/flake-utils.git"
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
       }
     }
   },

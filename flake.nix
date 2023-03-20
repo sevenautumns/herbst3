@@ -1,18 +1,18 @@
 {
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    utils.url = "git+https://github.com/numtide/flake-utils.git";
+    utils.url = "github:numtide/flake-utils";
     devshell.url = "github:numtide/devshell";
     fenix = {
-      url = "git+https://github.com/nix-community/fenix.git?ref=main";
+      url = "github:nix-community/fenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     naersk = {
-      url = "git+https://github.com/nix-community/naersk.git";
+      url = "github:nix-community/naersk";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     herbstluftwm = {
-      url = "git+file:./herbstluftwm";
+      url = "github:herbstluftwm/herbstluftwm";
       flake = false;
     };
   };
@@ -61,7 +61,7 @@
           nativeBuildInputs = with pkgs; [ installShellFiles ];
           LIBCLANG_PATH = "${pkgs.llvmPackages.libclang.lib}/lib";
           preConfigure = ''
-            ln -s ${herbstluftwm} herbstluftwm
+            export HERBSTLUFTWM_DIR=${herbstluftwm}
             export BINDGEN_EXTRA_CLANG_ARGS="-isystem ${pkgs.musl.dev}/include"
             export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}
             export LIBRARY_PATH=${LIBRARY_PATH}

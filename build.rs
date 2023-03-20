@@ -13,20 +13,24 @@ fn main() -> Result<(), Error> {
         None => return Ok(()),
         Some(outdir) => outdir,
     };
+    let hlwm = match env::var_os("HERBSTLUFTWM_DIR") {
+        None => String::from("herbstluftwm"),
+        Some(outdir) => outdir.into_string().unwrap(),
+    };
 
     cc::Build::new()
         .define("HERBSTLUFT_VERSION", "\"herbst3\"")
         .flag("-Wno-unused-parameter")
         // .flag("-Dmain=ipc_main")
         // .file("herbstluftwm/ipc-client/main.c")
-        .file("herbstluftwm/ipc-client/ipc-client.c")
-        .file("herbstluftwm/ipc-client/client-utils.c")
+        .file(format!("{hlwm}/ipc-client/ipc-client.c"))
+        .file(format!("{hlwm}/ipc-client/client-utils.c"))
         .opt_level(3)
         .compile("herbstipc");
     println!("cargo:rustc-link-lib=X11");
 
     let bindings = bindgen::Builder::default()
-        .header("herbstluftwm/ipc-client/ipc-client.c")
+        .header(format!("{hlwm}/ipc-client/ipc-client.c"))
         .parse_callbacks(Box::new(bindgen::CargoCallbacks))
         .allowlist_function("hc_send_command")
         .allowlist_function("hc_connect")
