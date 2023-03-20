@@ -3,9 +3,7 @@ use std::str::FromStr;
 use anyhow::{Context, Result};
 
 use crate::cli::ShiftDirection;
-use crate::herbstclient::{
-    get_focused_client_geometry, get_focused_frame_algorithm, get_focused_frame_geometry,
-};
+use crate::herbstclient::Herbstclient;
 use crate::parser::LayoutType;
 
 #[derive(Clone, Debug)]
@@ -61,8 +59,13 @@ impl Geometry {
     }
 }
 
-pub fn can_focus_within_frame(clients: usize, index: usize, dir: ShiftDirection) -> Result<bool> {
-    let algo = get_focused_frame_algorithm()?;
+pub fn can_focus_within_frame(
+    hc: &mut Herbstclient,
+    clients: usize,
+    index: usize,
+    dir: ShiftDirection,
+) -> Result<bool> {
+    let algo = hc.get_focused_frame_algorithm()?;
     if let LayoutType::Max = algo {
         match dir {
             ShiftDirection::Right => return Ok(index < (clients - 1)),
@@ -71,7 +74,7 @@ pub fn can_focus_within_frame(clients: usize, index: usize, dir: ShiftDirection)
         }
     }
 
-    let frame = get_focused_frame_geometry()?;
-    let client = get_focused_client_geometry()?;
+    let frame = hc.get_focused_frame_geometry()?;
+    let client = hc.get_focused_client_geometry()?;
     Ok(frame.child_can_move(&client, dir))
 }
