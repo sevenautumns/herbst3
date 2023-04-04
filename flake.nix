@@ -34,13 +34,10 @@
           stable.rustfmt
           targets.x86_64-unknown-linux-musl.stable.rust-std
         ];
-      C_INCLUDE_PATH = with pkgs;
-        lib.concatStringsSep ":" [
-          "${xorg.libX11.dev}/include"
-          "${xorg.xorgproto}/include"
-        ];
-      LD_LIBRARY_PATH = "${pkgs.libclang.lib}/lib";
-      LIBRARY_PATH = "${pkgs.xorg.libX11}/lib";
+      C_INCLUDE_PATH = lib.makeSearchPathOutput "dev" "include"
+        (with pkgs; [ xorg.libX11 xorg.xorgproto ]);
+      LD_LIBRARY_PATH = lib.makeLibraryPath [ pkgs.libclang.lib ];
+      LIBRARY_PATH = lib.makeLibraryPath [ pkgs.xorg.libX11 ];
 
       # overrides a naersk-lib which uses the stable toolchain expressed above
       naersk-lib = (naersk.lib.${system}.override {
@@ -59,10 +56,13 @@
           cargoTestOptions = x:
             x ++ [ "--target" "x86_64-unknown-linux-musl" ];
           nativeBuildInputs = with pkgs; [ installShellFiles ];
-          LIBCLANG_PATH = "${pkgs.llvmPackages.libclang.lib}/lib";
+          LIBCLANG_PATH =
+            lib.makeLibraryPath [ pkgs.llvmPackages.libclang.lib ];
           preConfigure = ''
             export HERBSTLUFTWM_DIR=${herbstluftwm}
-            export BINDGEN_EXTRA_CLANG_ARGS="-isystem ${pkgs.musl.dev}/include"
+            export BINDGEN_EXTRA_CLANG_ARGS='-isystem ${
+              lib.makeSearchPathOutput "dev" "include" [ pkgs.musl ]
+            }'
             export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}
             export LIBRARY_PATH=${LIBRARY_PATH}
             export C_INCLUDE_PATH=${C_INCLUDE_PATH}
